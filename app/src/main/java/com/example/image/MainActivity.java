@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 int position = getLayoutPosition();
                 String url = mData.get(position).getSrc();
                 selectedID = mData.get(position).getId();
+                Singleton.get().imageHashtable.get(mData.get(position).getId()).addView();
                 new DownloadImageTask(mData.get(position).getId()).execute(url);
             }
 
