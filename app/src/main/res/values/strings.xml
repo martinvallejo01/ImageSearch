@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ImageSearch</string>
+    <string name="down_icon_descrip">Heart icon, empty if no downloaded, full if downloaded</string>
 </resources>
