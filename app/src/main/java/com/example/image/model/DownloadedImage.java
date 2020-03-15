@@ -19,27 +19,27 @@ public class DownloadedImage {
         mNumberOfViews = 1;
     }
 
-    public Integer getmId() {
+    public Integer getId() {
         return mId;
     }
 
-    public void setmId(Integer mId) {
+    public void setId(Integer mId) {
         this.mId = mId;
     }
 
-    public Integer getmNumberOfViews() {
+    public Integer getNumberOfViews() {
         return mNumberOfViews;
     }
 
-    public void setmNumberOfViews(Integer mNumberOfViews) {
+    public void setNumberOfViews(Integer mNumberOfViews) {
         this.mNumberOfViews = mNumberOfViews;
     }
 
-    public Bitmap getmBitmap() {
+    public Bitmap getBitmap() {
         return mBitmap;
     }
 
-    public void setmBitmap(Bitmap mBitmap) {
+    public void setBitmap(Bitmap mBitmap) {
         this.mBitmap = mBitmap;
     }
 
