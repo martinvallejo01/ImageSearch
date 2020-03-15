@@ -92,11 +92,19 @@ public class Image {
     }
 
     public void addView() {
-        numberOfViews++;
+        if (numberOfViews == null) {
+            numberOfViews = 1;
+        } else {
+            numberOfViews++;
+        }
     }
 
     public boolean isImageNull() {
         return image == null;
+    }
+
+    public Integer getNumberOfViews() {
+        return numberOfViews;
     }
 
     @Override

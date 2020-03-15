@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.favorite:
                 // TODO
+                Intent intent = new Intent(this, FavoritesActivity.class);
+                startActivity(intent);
             case R.id.reload:
                 // TODO
                 mAdapter.notifyDataSetChanged();
@@ -95,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
             holder.mPhotoDimensions.setText(dimensions);
             holder.mPhotoUrl.setText(current.getUrl());
             if (!current.isImageNull())
-            holder.mFavIcon.setImageResource(R.drawable.ic_favorite_red_24dp);
+                holder.mFavIcon.setImageResource(R.drawable.ic_favorite_red_24dp);
+            else
+                holder.mFavIcon.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
 
         @Override
