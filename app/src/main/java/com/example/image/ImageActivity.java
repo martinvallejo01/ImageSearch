@@ -10,7 +10,7 @@ import android.os.Bundle;
 import com.example.image.model.Image;
 import com.example.image.model.Singleton;
 
-public class imageActivity extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity {
     Image mImage;
     Intent mIntent;
     TextView dimensions, title;

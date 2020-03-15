@@ -20,7 +20,6 @@ import com.example.image.model.Singleton;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        intent = new Intent(this, imageActivity.class);
+        intent = new Intent(this, ImageActivity.class);
     }
 
     @Override
