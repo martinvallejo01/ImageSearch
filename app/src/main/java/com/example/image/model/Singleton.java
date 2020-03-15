@@ -3,17 +3,24 @@ package com.example.image.model;
 import android.util.Log;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class Singleton {
     private static Singleton mInstance = null;
-    public Image[] mImages;
-    public Hashtable<Integer, DownloadedImage> mDownloadedImageHashtable;
+    public Hashtable<String, Image> imageHashtable;
 
     private Singleton() {
         load_data();
-        mDownloadedImageHashtable = new Hashtable<>();
         Log.d("DATA_MODEL", "data loaded");
+    }
+
+    public int size() {
+        return imageHashtable.size();
+    }
+
+    public ArrayList<Image> images() {
+        return new ArrayList<>(imageHashtable.values());
     }
 
     public static Singleton get() {
@@ -23,6 +30,7 @@ public class Singleton {
     }
 
     private void load_data() {
+        imageHashtable = new Hashtable<>();
         String stringData = "[\n" +
                         "    \n" +
                         "    {\n" +
@@ -527,7 +535,11 @@ public class Singleton {
                         "    \n" +
                         "]";
         Gson gson = new Gson();
-        mImages = gson.fromJson(stringData, Image[].class);
+        Image[] images = gson.fromJson(stringData, Image[].class);
+        for (int i = 0; i < images.length - 1; i++) {
+            Image image = images[i];
+            imageHashtable.put(image.getId(), image);
+        }
 
     }
 }

@@ -1,5 +1,7 @@
 package com.example.image.model;
 
+import android.graphics.Bitmap;
+
 import java.util.Objects;
 
 public class Image {
@@ -10,6 +12,8 @@ public class Image {
     private String src;
     private String url;
     private String potw;
+    private Bitmap image;
+    private Integer numberOfViews;
 
     public Image(String id, String title, Integer width, Integer height, String src, String url, String potw) {
         this.id = id;
@@ -19,6 +23,8 @@ public class Image {
         this.src = src;
         this.url = url;
         this.potw = potw;
+        numberOfViews = 0;
+        image = null;
     }
 
     public String getId() {
@@ -77,23 +83,41 @@ public class Image {
         this.potw = potw;
     }
 
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
+    public void addView() {
+        numberOfViews++;
+    }
+
+    public boolean isImageNull() {
+        return image == null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
-        return width.equals(image.width) &&
-                height.equals(image.height) &&
-                Objects.equals(id, image.id) &&
-                Objects.equals(title, image.title) &&
-                Objects.equals(src, image.src) &&
-                Objects.equals(url, image.url) &&
-                Objects.equals(potw, image.potw);
+        Image image1 = (Image) o;
+        return Objects.equals(id, image1.id) &&
+                Objects.equals(title, image1.title) &&
+                Objects.equals(width, image1.width) &&
+                Objects.equals(height, image1.height) &&
+                Objects.equals(src, image1.src) &&
+                Objects.equals(url, image1.url) &&
+                Objects.equals(potw, image1.potw) &&
+                Objects.equals(image, image1.image) &&
+                Objects.equals(numberOfViews, image1.numberOfViews);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, width, height, src, url, potw);
+        return Objects.hash(id, title, width, height, src, url, potw, image, numberOfViews);
     }
 
     @Override
@@ -106,6 +130,8 @@ public class Image {
                 ", src='" + src + '\'' +
                 ", url='" + url + '\'' +
                 ", potw='" + potw + '\'' +
+                ", image=" + image +
+                ", numberOfViews=" + numberOfViews +
                 '}';
     }
 }
