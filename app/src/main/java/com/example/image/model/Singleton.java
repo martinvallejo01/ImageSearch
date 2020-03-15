@@ -3,12 +3,16 @@ package com.example.image.model;
 import android.util.Log;
 import com.google.gson.Gson;
 
+import java.util.Hashtable;
+
 public class Singleton {
     private static Singleton mInstance = null;
     public Image[] mImages;
+    public Hashtable<Integer, DownloadedImage> mDownloadedImageHashtable;
 
     private Singleton() {
         load_data();
+        mDownloadedImageHashtable = new Hashtable<>();
         Log.d("DATA_MODEL", "data loaded");
     }
 
