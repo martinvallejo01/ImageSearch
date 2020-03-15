@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">ImageSearch</string>
     <string name="down_icon_descrip">Heart icon, empty if no downloaded, full if downloaded</string>
+    <string name="image_downloaded_from_internet">Image downloaded from internet</string>
+    <string name="close_window">Icon to close window</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.image;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             return Singleton.get().size();
         }
 
-        class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        class ImageViewHolder extends RecyclerView.ViewHolder {
             public final TextView mPhotoTitle, mPhotoUrl, mPhotoDimensions;
             public final ImageView mFavIcon;
             private final ImageListAdapter mAdapter;
@@ -104,14 +105,25 @@ public class MainActivity extends AppCompatActivity {
                 mPhotoDimensions = itemView.findViewById(R.id.photoDimensions_textView);
                 mFavIcon = itemView.findViewById(R.id.loveIcon_imageView);
                 mAdapter = adapter;
-                itemView.setOnClickListener(this);
-            }
-            @Override
-            public void onClick(View view) {
-                int position = getLayoutPosition();
-                String url = mData.get(position).getSrc();
-                new DownloadImageTask(mFavIcon, mData.get(position).getId()).execute(url);
-                mAdapter.notifyDataSetChanged();
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getLayoutPosition();
+                        String id = mData.get(position).getId();
+                        Intent intent = new Intent(v.getContext(), imageActivity.class);
+                        intent.putExtra("ID", id);
+                        startActivity(intent);
+
+                    }
+                });
+                mFavIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getLayoutPosition();
+                        String url = mData.get(position).getSrc();
+                        new DownloadImageTask(mFavIcon, mData.get(position).getId()).execute(url);
+                    }
+                });
             }
         }
 
