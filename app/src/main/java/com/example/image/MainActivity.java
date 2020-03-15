@@ -2,6 +2,9 @@ package com.example.image;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
@@ -15,6 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.image.model.Image;
 import com.example.image.model.Singleton;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar mToolbar;
     RecyclerView mRecyclerView;
     ImageListAdapter mAdapter;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        intent = new Intent(this, imageActivity.class);
     }
 
     @Override
@@ -94,10 +104,12 @@ public class MainActivity extends AppCompatActivity {
             return Singleton.get().size();
         }
 
-        class ImageViewHolder extends RecyclerView.ViewHolder {
+        class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public final TextView mPhotoTitle, mPhotoUrl, mPhotoDimensions;
             public final ImageView mFavIcon;
             private final ImageListAdapter mAdapter;
+
+            private String selectedID = "";
             public ImageViewHolder(View itemView, ImageListAdapter adapter) {
                 super(itemView);
                 mPhotoTitle = itemView.findViewById(R.id.photoTitle_textView);
@@ -105,27 +117,57 @@ public class MainActivity extends AppCompatActivity {
                 mPhotoDimensions = itemView.findViewById(R.id.photoDimensions_textView);
                 mFavIcon = itemView.findViewById(R.id.loveIcon_imageView);
                 mAdapter = adapter;
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = getLayoutPosition();
-                        String id = mData.get(position).getId();
-                        Intent intent = new Intent(v.getContext(), imageActivity.class);
-                        intent.putExtra("ID", id);
-                        startActivity(intent);
+                itemView.setOnClickListener(this);
+            }
 
+            @Override
+            public void onClick(View v) {
+                int position = getLayoutPosition();
+                String url = mData.get(position).getSrc();
+                selectedID = mData.get(position).getId();
+                new DownloadImageTask(mData.get(position).getId()).execute(url);
+            }
+
+            public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
+                private Image imageInfo;
+
+                DownloadImageTask(String imageId) {
+                    imageInfo = Singleton.get().imageHashtable.get(imageId);
+                }
+
+                @Override
+                protected Bitmap doInBackground(String... strings) {
+                    InputStream inputStream = null;
+                    try {
+                        URL url = new URL(strings[0]);
+                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                        inputStream = httpURLConnection.getInputStream();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
-                mFavIcon.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int position = getLayoutPosition();
-                        String url = mData.get(position).getSrc();
-                        new DownloadImageTask(mFavIcon, mData.get(position).getId()).execute(url);
+                    return BitmapFactory.decodeStream(inputStream);
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                    Image image = imageInfo;
+                    image.setImage(bitmap);
+                    String imageId = image.getId();
+                    Singleton.get().imageHashtable.put(imageId, image);
+                    Log.d("TASK", "Selected ID: " + selectedID);
+                    Log.d("TASK", "Image ID: " + imageId);
+                    notifyDataSetChanged();
+                    if (selectedID.equals(imageId)){
+                        intent.putExtra("ID", image.getId());
+                        startActivity(intent);
+                        selectedID = "";
                     }
-                });
+                }
             }
         }
+
 
     }
 
